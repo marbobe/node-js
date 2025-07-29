@@ -12,11 +12,15 @@ const getProdcutsFromFile = (cb) => { //cb es una callback
 }
 
 module.exports = class Product {
-    constructor(t) {
-        this.title = t;
+    constructor(title, imageUrl, price, description) {
+        this.title = title;
+        this.imageUrl = imageUrl;
+        this.price = price;
+        this.description = description;
     }
 
     save() {
+        this.id = Math.random().toString();
         getProdcutsFromFile(products => {
             products.push(this);
             fs.writeFile(p, JSON.stringify(products), (err) => { //convierte array to text
