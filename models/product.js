@@ -1,36 +1,31 @@
-const fs = require('fs');
-const path = require('path');
-const p = path.join(path.dirname(require.main.filename), 'data', 'products.json'); //crea un archivo en la carpeta data
+const db = require('../util/database');
 
-const getProdcutsFromFile = (cb) => { //cb es una callback 
-    fs.readFile(p, (err, fileContent) => {
-        if (err) {
-            return cb([]);
-        }
-        cb(JSON.parse(fileContent)); //convierte texto a array
-    });
-}
+const Cart = require('./cart');
+
 
 module.exports = class Product {
-    constructor(title, imageUrl, price, description) {
-        this.title = title;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.description = description;
-    }
+  constructor(id, title, imageUrl, description, price) {
+    this.id = id;
+    this.title = title;
+    this.imageUrl = imageUrl;
+    this.description = description;
+    this.price = price;
+  }
 
-    save() {
-        this.id = Math.random().toString();
-        getProdcutsFromFile(products => {
-            products.push(this);
-            fs.writeFile(p, JSON.stringify(products), (err) => { //convierte array to text
-                console.log(err);
-            });
-        });
-    }
+  save() {
+    return db.execute('INSERT INTO products (title, price, imageUrl, description) VALUES (?, ?, ?, ?)', // se usan los ?? como metodo de seguridad y evitar que te inserten datos los usuarios
+      [this.title, this.price, this.imageUrl, this.description]);
+  }
 
-    static fetchAll(cb) {
-        getProdcutsFromFile(cb);
-    }
+  static deleteById(id) {
 
+  }
+
+  static fetchAll() { //PROMISE
+    return db.execute('SELECT * FROM products');
+  }
+
+  static findById(id) {
+    return db.execute('SELECT * FROM products WHERE products.id = ?', [id]);
+  }
 };

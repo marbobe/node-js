@@ -10,13 +10,16 @@ router.get('/', shopController.getIndex);
 
 router.get('/products', shopController.getProducts);
 
-router.get('/products/:productId', shopController.getProduct); //debe ir debajo de las rutas específicas con ej: /products/delete debe ir antes sinó no se accederá nunca
+router.get('/products/:productId', shopController.getProduct);
 
 router.get('/cart', shopController.getCart);
 
-router.get('/checkout', shopController.getCheckout);
+router.post('/cart', shopController.postCart);
+
+router.post('/cart-delete-item', shopController.postCartDeleteProduct);
 
 router.get('/orders', shopController.getOrders);
 
+router.get('/checkout', shopController.getCheckout);
 
 module.exports = router;
