@@ -6,3 +6,4 @@ npm-debug.log
 .vscode
 database.js
 app.js
+controllers/auth.js
